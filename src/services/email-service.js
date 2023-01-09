@@ -1,4 +1,7 @@
 const sender = require("../config/emailConfig");
+const TicketRepository = require("../repositories/ticket-repository");
+
+const ticketRepository = new TicketRepository();
 
 const sendBasicEmail = async (mailFrom, mailTo, mailSubject, mailBody) => {
   try {
@@ -13,8 +16,38 @@ const sendBasicEmail = async (mailFrom, mailTo, mailSubject, mailBody) => {
   }
 };
 
+const fetchPendingEmails = async (timestamp) => {
+  try {
+    const response = await ticketRepository.get({ status: "PENDING" });
+    return response;
+  } catch (error) {
+    console.log("Something went worng while sending mail");
+  }
+};
+
+const createNotification = async (data) => {
+  try {
+    const response = await ticketRepository.create(data);
+    return response;
+  } catch (error) {
+    console.log("Something went worng while sending mail");
+  }
+};
+
+const updateTicket = async (data, ticketId) => {
+  try {
+    const response = await ticketRepository.update(data, ticketId);
+    return response;
+  } catch (error) {
+    console.log("Something went worng while sending mail");
+  }
+};
+
 module.exports = {
   sendBasicEmail,
+  fetchPendingEmails,
+  createNotification,
+  updateTicket,
 };
 
 /**
